@@ -1,32 +1,43 @@
-// JavaScript Code
+// server/server.js
+import express from 'express';
+import cors from 'cors';
+import fetch from 'node-fetch';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// API URL via Proxy Server (relative path)
-const API_URL = '/api/meals';
+// For at få __dirname i ES-moduler
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Funktion til at hente madplanen fra API'en
-async function fetchMealPlan() {
-    const loadingElement = document.getElementById('loading');
-    const weeklyPlanElement = document.getElementById('weekly-plan');
+const app = express();
+const PORT = process.env.PORT || 3000;
+const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
 
+app.use(cors());
+
+// Serve frontend files
+app.use(express.static(path.join(__dirname, '../public')));
+
+// API Route
+app.get('/api/meals', async (req, res) => {
     try {
         const response = await fetch(API_URL);
-        console.log('Fetch response status:', response.status);
-
         if (!response.ok) {
             throw new Error(`HTTP-fejl! Status: ${response.status}`);
         }
-
         const data = await response.json();
-        console.log('API Data:', data);
-
-        generateMealPlan(data);
+        res.json(data);
     } catch (error) {
         console.error('Fejl ved hentning af API-data:', error);
-        displayError(error);
-    } finally {
-        loadingElement.style.display = 'none'; // Skjul loading
-        weeklyPlanElement.style.display = 'block'; // Vis madplanen
+        res.status(500).json({ error: 'Fejl ved hentning af madplanen.' });
     }
-}
+});
 
-// Resten af din kode...
+// Fallback til frontend (for Single Page Applications)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`Proxy server kører på http://localhost:${PORT}`);
+});
