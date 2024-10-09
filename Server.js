@@ -1,29 +1,32 @@
-// server.js
+// JavaScript Code
 
-import express from 'express';
-import cors from 'cors';
-import fetch from 'node-fetch'; // Sørg for at have node-fetch installeret
+// API URL via Proxy Server (relative path)
+const API_URL = '/api/meals';
 
-const app = express();
-const PORT = 3000;
-const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
+// Funktion til at hente madplanen fra API'en
+async function fetchMealPlan() {
+    const loadingElement = document.getElementById('loading');
+    const weeklyPlanElement = document.getElementById('weekly-plan');
 
-app.use(cors());
-
-app.get('/api/meals', async (req, res) => {
     try {
         const response = await fetch(API_URL);
+        console.log('Fetch response status:', response.status);
+
         if (!response.ok) {
             throw new Error(`HTTP-fejl! Status: ${response.status}`);
         }
+
         const data = await response.json();
-        res.json(data);
+        console.log('API Data:', data);
+
+        generateMealPlan(data);
     } catch (error) {
         console.error('Fejl ved hentning af API-data:', error);
-        res.status(500).json({ error: 'Fejl ved hentning af madplanen.' });
+        displayError(error);
+    } finally {
+        loadingElement.style.display = 'none'; // Skjul loading
+        weeklyPlanElement.style.display = 'block'; // Vis madplanen
     }
-});
+}
 
-app.listen(PORT, () => {
-    console.log(`Proxy server kører på http://localhost:${PORT}`);
-});
+// Resten af din kode...
