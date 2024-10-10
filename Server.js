@@ -1,11 +1,10 @@
-// server/server.js
 import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// For at få __dirname i ES-moduler
+// For compatibility with __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -15,7 +14,7 @@ const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
 
 app.use(cors());
 
-// Serve frontend files
+// Serve frontend files from the 'public' directory
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API Route
@@ -33,7 +32,7 @@ app.get('/api/meals', async (req, res) => {
     }
 });
 
-// Fallback til frontend (for Single Page Applications)
+// Fallback for Single Page Applications
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
