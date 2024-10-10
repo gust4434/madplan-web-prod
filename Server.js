@@ -14,8 +14,8 @@ const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
 
 app.use(cors());
 
-// Serve frontend files from the 'public' directory
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve frontend files directly from the root directory
+app.use(express.static(__dirname));
 
 // API Route
 app.get('/api/meals', async (req, res) => {
@@ -34,7 +34,7 @@ app.get('/api/meals', async (req, res) => {
 
 // Fallback for Single Page Applications
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'Index.html'));
 });
 
 app.listen(PORT, () => {
