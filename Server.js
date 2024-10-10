@@ -38,5 +38,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Proxy server kører på http://localhost:${PORT}`);
+    console.log(`Proxy server kører på 'http://162.243.161.68/`);
 });
