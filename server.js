@@ -9,7 +9,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on http://162.243.161.68:${PORT}`);
+});
+
 const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
 
 app.use(cors());
