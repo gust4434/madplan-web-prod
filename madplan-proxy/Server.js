@@ -5,7 +5,7 @@ import cors from 'cors';
 import fetch from 'node-fetch'; // Sørg for at have node-fetch installeret
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 const API_URL = 'https://lunch.tosi.dk/api/v1/latest.json';
 
 app.use(cors());
